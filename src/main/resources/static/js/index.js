@@ -1,29 +1,57 @@
 requirejs.config({
-baseUrl: 'js'
+    baseUrl: 'js'
 })
 
 
 function buildRoute(view) {
-return function() {
-webix.ui({
-id: 'root',
-rows: [
-view
-]
-}, $$("root"))
-}
+    return function() {
+        webix.ui({
+            id: 'root',
+            rows: [
+                view
+            ]
+        }, $$('root'))
+    }
 }
 
-require(['views/main', 'views/cars'], function(main, cars) {
-webix.ready(function() {
-webix.ui({
-id: 'root',
-container: "app"
-})
-})
+function buildButton(label, route) {
+    return {
+        view: 'button',
+        value: label,
+        width: 100,
+        align: 'center',
+        click: function() {
+            routie(route)
+        }
+    }
+}
 
-routie({
-'': buildRoute(main),
-'cars': buildRoute(cars)
-})
+require(
+    ['views/main', 'views/cars', 'views/marks', 'util/resourceProxy'],
+    function(main, cars, marks, resourceProxy) {
+    webix.ready(function() {
+        webix.ui({
+            container: 'app',
+            width: document.body.clientWidth,
+            height: document.body.clientHeight,
+            rows: [
+                {
+                    view: 'toolbar',
+                    cols: [
+                        buildButton('Home', ''),
+                        buildButton('Marks', 'marks')
+                    ]
+                },
+                {
+                    id: 'root'
+                }
+            ]
+        })
+    })
+
+    routie({
+        '': buildRoute(main),
+        'cars': buildRoute(cars),
+        'marks': buildRoute(marks)
+    })
 })
