@@ -1,4 +1,3 @@
-
 define(['component/listPage'], function(listPage) {
     return listPage(
         'markList',
